@@ -11,11 +11,20 @@ const io = socketio(server, {
   }
 })
 const cors = require("cors")
+const userRoutes = require("./routes/users")
+const connectDB = require("./config/db")
 
+connectDB()
 
 // Middleware
 app.use(bodyParser.urlencoded({extended:true}))
 app.use(cors())
+
+
+app.use("/users", userRoutes)
+
+// STORE MESSAGE VALUE
+// Create User Account
 
 io.on('connection', (socket) => {
   console.log('A user connected')
@@ -29,6 +38,7 @@ io.on('connection', (socket) => {
     console.log(message)
   })
 })
+
 
 const PORT = 3000
 server.listen(PORT, () => {
