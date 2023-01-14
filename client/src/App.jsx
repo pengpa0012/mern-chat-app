@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react'
 import './App.css'
 import { io } from "socket.io-client";
+import { useNavigate } from 'react-router-dom'
 
 function App() {
+  const navigate = useNavigate()
   const [messages, setMessages] = useState([
     {
       message: "",
@@ -12,6 +14,14 @@ function App() {
   const [socketId, setSocketId] = useState(null)
   const [room, setRoom] = useState()
   const [socket] = useState(io("ws://localhost:3000"))
+  const isLoggedIn = localStorage.getItem("isLoggedIn")
+  const token = localStorage.getItem("token")
+
+  useEffect(() => {
+    if(!isLoggedIn) {
+     return navigate("/login")
+    }
+  }, [isLoggedIn])
 
   useEffect(() => {
     setSocketId(socket.id);
