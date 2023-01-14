@@ -24,7 +24,8 @@ io.on('connection', (socket) => {
   })
 
   socket.on("new message", (message) => {
-    io.emit("new message", message)
+    const payload = {message, id: socket.id}
+    io.emit("new message", payload)
     console.log(message)
   })
 })
