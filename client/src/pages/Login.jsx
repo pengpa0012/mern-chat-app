@@ -17,17 +17,18 @@ export const Login = () => {
   const onSubmit = (e) => {
     e.preventDefault()
     const form = e.target
-    const email = form.elements['email'].value
+    const username = form.elements['username'].value
     const password = form.elements['password'].value
-    if(!email || !password) return
+    if(!username || !password) return
 
     axios.post(`${import.meta.env.VITE_ENDPOINT}/users/login`, {
-      email,
+      username,
       password
     })
     .then(response => {
       localStorage.setItem("isLoggedIn", true);
       localStorage.setItem("token", response.data.accessToken);
+      localStorage.setItem("user", JSON.stringify(response.data.result[0].username))
       Notiflix.Notify.success('Login Successfully')
       navigate("/")
     })
@@ -38,7 +39,7 @@ export const Login = () => {
       <div className="bg-gray-900 p-6 rounded-lg" style={{ width: 300 }}>
         <h1 className="text-2xl mb-4">Todo App</h1>
         <form className="flex flex-col" onSubmit={onSubmit} id="form">
-          <input type="email" name="email" placeholder="email" className="p-2 rounded-lg mb-2"/>
+          <input type="username" name="username" placeholder="username" className="p-2 rounded-lg mb-2"/>
           <input type="password" name="password" placeholder="password" className="p-2 rounded-lg mb-2" />
           <button type="submit" className="bg-green-500 rounded-lg py-2 mb-4">Login</button>
         </form>

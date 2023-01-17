@@ -1,17 +1,19 @@
 const mongoose = require("mongoose")
 
 const userSchema = new mongoose.Schema({
-  name: String,
+  username: String,
   email: String,
   password: String,
 });
 
 const messageSchema = new mongoose.Schema({
-  text: String,
-  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  text: String, 
+  username: String,
+  room: String,
+  createdAt: { type: Date, default: Date.now },
 });
 
 module.exports = {
-  User: mongoose.model('User', userSchema),
+  Users: mongoose.model('Users', userSchema),
   Message: mongoose.model('Message', messageSchema)
 }

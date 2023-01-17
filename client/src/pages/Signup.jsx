@@ -14,18 +14,17 @@ export const Signup = () => {
      }
   }, [])
 
+
   const onSubmit = (e) => {
     e.preventDefault()
     const form = e.target
     const username = form.elements['username'].value
     const password = form.elements['password'].value
-    const email = form.elements['email'].value
     const repeatPassword = form.elements['repeatPassword'].value
     if(!username || !password) return
     if(password !== repeatPassword) return Notiflix.Notify.failure("Password does not matched")
     axios.post(`${import.meta.env.VITE_ENDPOINT}/users/signup`, {
       username,
-      email,
       password
     })
     .then(response => {
@@ -40,7 +39,6 @@ export const Signup = () => {
         <h1 className="text-2xl mb-4">Register</h1>
         <form className="flex flex-col" onSubmit={onSubmit} id="form">
           <input type="text" name="username" placeholder="username" className="p-2 rounded-lg mb-2"/>
-          <input type="email" name="email" placeholder="email" className="p-2 rounded-lg mb-2"/>
           <input type="password" name="password" placeholder="password" className="p-2 rounded-lg mb-2" />
           <input type="password" name="repeatPassword" placeholder="repeat password" className="p-2 rounded-lg mb-2" />
           <button type="submit" className="bg-green-500 rounded-lg py-2 mb-4">Signup</button>
