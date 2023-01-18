@@ -30,10 +30,15 @@ io.on('connection', (socket) => {
       console.log('User disconnected')
   })
 
+  socket.on('join room', (room) => {
+    socket.join(room);
+    io.in(room).emit('user joined', room);
+  });
+
   socket.on("new message", (message, username, room) => {
     const payload = {text: message, username, room, createdAt: Date.now()}
     Message.insertMany([payload])
-    io.emit("new message", payload)
+    io.in(room).emit("new message", payload)
   })
 })
 
