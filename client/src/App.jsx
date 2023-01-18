@@ -4,6 +4,7 @@ import { io } from "socket.io-client";
 import { useNavigate } from 'react-router-dom'
 import { useQuery } from 'react-query'
 import { formatDate, sortDate } from './utils';
+import Notiflix from 'notiflix'
 
 function App() {
   const navigate = useNavigate()
@@ -15,7 +16,7 @@ function App() {
       createdAt: ""
     }
   ])
-  const [socketId, setSocketId] = useState(null)
+  const [socketId, setSocketId] = useState()
   const [room, setRoom] = useState()
   const [socket] = useState(io("ws://localhost:3000"))
   const isLoggedIn = localStorage.getItem("isLoggedIn")
@@ -32,7 +33,7 @@ function App() {
 
   useEffect(() => {
     if(status == "success") {
-      setMessages([...allMessages.messages])
+      setMessages([allMessages?.messages])
     }
   }, [status])
 
@@ -42,8 +43,6 @@ function App() {
      return navigate("/login")
     }
   }, [isLoggedIn])
-
-  console.log(messages)
 
 
   useEffect(() => {
@@ -71,19 +70,30 @@ function App() {
   //   setRoom(message.target.value)
   // }
 
+  const onLogout = () => {
+    if(!confirm("Are you sure you want to logout?")) return
+    localStorage.removeItem("isLoggedIn")
+    localStorage.removeItem("user")
+    localStorage.removeItem("token")
+    navigate("/")
+    Notiflix.Notify.success('Logout Successfully')
+  }
 
   return (
     <div className="App">
       <div className="m-2">
-        <h1>Room join: {room || "General"}</h1>
-        <div className="p-3 h-80 border border-gray-500 rounded-md text-left message-box overflow-auto">
+        <div className="flex justify-between items-center my-4">
+          <h1>Room join: {room ?? "General"}</h1>
+          <button className="bg-green-500 hover:bg-green-600 p-2 px-4 rounded-md" onClick={() => onLogout()}>Logout</button>
+        </div>
+        <div className="px-3 py-6 h-80 border border-gray-500 rounded-md text-left message-box overflow-auto">
           {
-             messages?.filter(message => message.username != "").map((message, i) => ( 
-              <h1 key={`message-${i}`} className="bg-gray-700 p-2 mb-1 rounded-md flex justify-between items-center">
+             messages?.flat()?.filter(message => message?.username != "").map((message, i) => ( 
+              <h1 key={`message-${i}`} className={`bg-gray-700 p-3 mb-1 rounded-md flex justify-between items-center w-1/2 mb-6 ${username == message?.username ? "" : "ml-auto"} relative`}>
                 <span>
-                  {`${username == message.username ? "You" : message.username}: ${message.text}`}
+                  {`${username == message?.username ? "You" : message?.username}: ${message?.text}`}
                 </span>
-                <span className="text-xs">{formatDate(message.createdAt)}</span>
+                <span className="text-gray-400 absolute -bottom-6 right-0" style={{ fontSize: 11 }}>{formatDate(message?.createdAt)}</span>
               </h1>
             ))
           }
