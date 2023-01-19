@@ -78,7 +78,6 @@ function App() {
     socket.emit("join room", message.target.value || "General")
     setRoomID(message.target.value || "General")
   }
-  console.log("ROOM", roomID)
   const onLogout = () => {
     if(!confirm("Are you sure you want to logout?")) return
     localStorage.removeItem("isLoggedIn")
@@ -91,36 +90,36 @@ function App() {
   return (
     <div className="App min-h-full flex">
       <div className="p-2 h-screen min-w-[250px] w-1/6 bg-gray-800">
-        <div className="p-2 my-4 h-full flex flex-col justify-between">
+        <div className="p-2 h-full flex flex-col justify-between">
           <div className="flex justify-between items-center my-4">
-            {/* <h1>Room join: {roomID}</h1> */}
-            <h1 className="text-2xl text-center">{username}</h1>
-            <button className="bg-green-500 hover:bg-green-600 p-2 px-4 rounded-md" onClick={() => onLogout()}>Logout</button>
+            <h1 className="text-xl text-center">{username}</h1>
+            <h2 className="text-sm">Room: {roomID}</h2>
           </div>
-          <ul className="my-12">
+          <ul className="my-12 text-center">
             <li>Room 1</li>
             <li>Room 2</li>
             <li>Room 3</li>
             <li>Room 4</li>
           </ul>
-          <p>footer</p>
+          <button className="bg-red-600 hover:bg-red-700 p-2 px-4 rounded-md" onClick={() => onLogout()}>Logout</button>
         </div>
       </div>
       <div className="p-2 h-screen w-full">
-        <div className="my-4 px-3 py-6 border min-h-[80%] border-gray-500 rounded-md text-left message-box overflow-auto">
+        <div className="my-4 px-3 py-6 border min-h-[80%] max-h-[600px] border-gray-500 rounded-md text-left message-box overflow-auto">
           {
              messages?.flat()?.filter(message => message?.username != "").filter(room => room?.room == roomID).map((message, i) => ( 
-              <h1 key={`message-${i}`} className={`bg-gray-700 p-3 mb-1 rounded-md flex justify-between items-center w-1/2 mb-6 ${username == message?.username ? "" : "ml-auto"} relative`}>
+              <h1 key={`message-${i}`} className={`p-3 mb-1 flex justify-between items-center w-1/2 mb-6 ${username == message?.username ? "rounded-r-xl rounded-t-xl bg-green-600" : "ml-auto rounded-l-xl rounded-t-xl bg-gray-700"} relative`}>
+                <span className="text-gray-400 absolute -top-6 left-2" style={{ fontSize: 11 }}>{username == message?.username ? "You" : message?.username}</span>
                 <span>
-                  {`${username == message?.username ? "You" : message?.username}: ${message?.text}`}
+                  {message?.text}
                 </span>
-                <span className="text-gray-400 absolute -bottom-6 right-0" style={{ fontSize: 11 }}>{formatDate(message?.createdAt)}</span>
+                <span className="text-gray-400 absolute -bottom-6 right-2" style={{ fontSize: 11 }}>{formatDate(message?.createdAt)}</span>
               </h1>
             ))
           }
         </div>
         <div className="min-h-[10%]">
-          <div className="mt-4">
+          <div className="mt-4 flex">
             <input type="text" placeholder="Send message..." className="p-2 rounded-md w-full focus:outline-none message-input" onKeyDown={(e) => {
               // socket.emit("user typing", `${username} is typing...`, roomID)
               // socket.on("user typing", (message) => {
@@ -129,6 +128,7 @@ function App() {
               // })
               onSendMessage(e)
             }} />
+            {/* <button className="ml-2 bg-blue-500 bg- px-6 rounded-md">Send</button> */}
           </div>
           <div className="flex mt-2">
             <input type="text" placeholder="Join room..." className="p-2 rounded-md w-full focus:outline-none room-input" onKeyDown={(e) => onJoinRoom(e)} />

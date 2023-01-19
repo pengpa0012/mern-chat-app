@@ -44,6 +44,7 @@ io.on('connection', (socket) => {
   socket.on("user typing", (message, room) => {
     io.in(room).emit("user typing", message)
   })
+
 })
 
 
