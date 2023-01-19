@@ -8,6 +8,11 @@ const {Users, Message} = require("../model")
 
 router.post("/signup", async (req, res) => {
   const {username, password} = req.body
+  const checkUsername = await Users.find({username})
+  if(checkUsername.length > 0) {
+    res.status(500).send({message: "Username already exist"})
+    return
+  }
   const salt = await bcrypt.genSalt(10)
   const hashPass = await bcrypt.hash(password, salt)
 

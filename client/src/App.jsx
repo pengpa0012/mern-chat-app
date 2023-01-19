@@ -18,6 +18,7 @@ function App() {
   ])
   const [socketId, setSocketId] = useState()
   const [roomID, setRoomID] = useState("General")
+  // const [userTyping, setUserTyping] = useState()
   const [socket] = useState(io("ws://localhost:3000"))
   const isLoggedIn = localStorage.getItem("isLoggedIn")
   const username = JSON.parse(localStorage.getItem("user"))
@@ -74,10 +75,10 @@ function App() {
   const onJoinRoom = (message) => {
     if(message.key !== "Enter") return
     refetch()
-    socket.emit("join room", message.target.value)
-    setRoomID(message.target.value)
+    socket.emit("join room", message.target.value || "General")
+    setRoomID(message.target.value || "General")
   }
-
+  console.log("ROOM", roomID)
   const onLogout = () => {
     if(!confirm("Are you sure you want to logout?")) return
     localStorage.removeItem("isLoggedIn")
@@ -88,15 +89,27 @@ function App() {
   }
 
   return (
-    <div className="App">
-      <div className="m-2">
-        <div className="flex justify-between items-center my-4">
-          <h1>Room join: {roomID ?? "General"}</h1>
-          <button className="bg-green-500 hover:bg-green-600 p-2 px-4 rounded-md" onClick={() => onLogout()}>Logout</button>
+    <div className="App min-h-full flex">
+      <div className="p-2 h-screen min-w-[250px] w-1/6 bg-gray-800">
+        <div className="p-2 my-4 h-full flex flex-col justify-between">
+          <div className="flex justify-between items-center my-4">
+            {/* <h1>Room join: {roomID}</h1> */}
+            <h1 className="text-2xl text-center">{username}</h1>
+            <button className="bg-green-500 hover:bg-green-600 p-2 px-4 rounded-md" onClick={() => onLogout()}>Logout</button>
+          </div>
+          <ul className="my-12">
+            <li>Room 1</li>
+            <li>Room 2</li>
+            <li>Room 3</li>
+            <li>Room 4</li>
+          </ul>
+          <p>footer</p>
         </div>
-        <div className="px-3 py-6 h-80 border border-gray-500 rounded-md text-left message-box overflow-auto">
+      </div>
+      <div className="p-2 h-screen w-full">
+        <div className="my-4 px-3 py-6 border min-h-[80%] border-gray-500 rounded-md text-left message-box overflow-auto">
           {
-             messages?.flat()?.filter(message => message?.username != "").filter(room => room.room == roomID).map((message, i) => ( 
+             messages?.flat()?.filter(message => message?.username != "").filter(room => room?.room == roomID).map((message, i) => ( 
               <h1 key={`message-${i}`} className={`bg-gray-700 p-3 mb-1 rounded-md flex justify-between items-center w-1/2 mb-6 ${username == message?.username ? "" : "ml-auto"} relative`}>
                 <span>
                   {`${username == message?.username ? "You" : message?.username}: ${message?.text}`}
@@ -106,11 +119,20 @@ function App() {
             ))
           }
         </div>
-        <div className="mt-4">
-          <input type="text" placeholder="Send message..." className="p-2 rounded-md w-full focus:outline-none message-input" onKeyDown={(e) => onSendMessage(e)} />
-        </div>
-        <div className="flex mt-2">
-          <input type="text" placeholder="Join room..." className="p-2 rounded-md w-full focus:outline-none room-input" onKeyDown={(e) => onJoinRoom(e)} />
+        <div className="min-h-[10%]">
+          <div className="mt-4">
+            <input type="text" placeholder="Send message..." className="p-2 rounded-md w-full focus:outline-none message-input" onKeyDown={(e) => {
+              // socket.emit("user typing", `${username} is typing...`, roomID)
+              // socket.on("user typing", (message) => {
+              //   if(message.split(" ")[0] == username) return
+              //   console.log("here")
+              // })
+              onSendMessage(e)
+            }} />
+          </div>
+          <div className="flex mt-2">
+            <input type="text" placeholder="Join room..." className="p-2 rounded-md w-full focus:outline-none room-input" onKeyDown={(e) => onJoinRoom(e)} />
+          </div>
         </div>
       </div>
     </div>

@@ -28,10 +28,11 @@ export const Signup = () => {
       password
     })
     .then(response => {
+      console.log(response)
       Notiflix.Notify.success(response.data.message)
       navigate("/login")
     })
-    .catch((err) => Notiflix.Notify.failure('Signup Error'))
+    .catch((err) => Notiflix.Notify.failure(err.response.data.message))
   }
   return (
     <div className="absolute inset-0 grid items-center justify-center">

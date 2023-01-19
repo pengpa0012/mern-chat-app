@@ -40,6 +40,10 @@ io.on('connection', (socket) => {
     Message.insertMany([payload])
     io.in(room).emit("new message", payload)
   })
+
+  socket.on("user typing", (message, room) => {
+    io.in(room).emit("user typing", message)
+  })
 })
 
 
@@ -49,4 +53,9 @@ server.listen(PORT, () => {
 })
 
 // TODO 
-// -Add rooms
+// -Typing animation
+// -Room style
+// -Fixed logout bug
+// -Fixed chat box style
+// -Avoid same username in signup
+// -Add sidebar content
