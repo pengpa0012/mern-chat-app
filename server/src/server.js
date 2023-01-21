@@ -57,6 +57,5 @@ server.listen(PORT, () => {
 // -Typing animation
 // -Room style
 // -Fixed logout bug
-// -Fixed chat box style
-// -Avoid same username in signup
 // -Add sidebar content
+// -Add logout Modal
