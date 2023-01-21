@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import { useQuery } from 'react-query'
 import { formatDate, sortDate } from './utils';
 import Notiflix from 'notiflix'
+import { Modal } from './components/Modal';
 
 function App() {
   const navigate = useNavigate()
@@ -17,6 +18,7 @@ function App() {
     }
   ])
   const [socketId, setSocketId] = useState()
+  const [showModal, setShowModal] = useState(false)
   const [roomID, setRoomID] = useState("General")
   // const [userTyping, setUserTyping] = useState()
   const [socket] = useState(io("ws://localhost:3000"))
@@ -79,7 +81,6 @@ function App() {
     setRoomID(message.target.value || "General")
   }
   const onLogout = () => {
-    if(!confirm("Are you sure you want to logout?")) return
     localStorage.removeItem("isLoggedIn")
     localStorage.removeItem("user")
     localStorage.removeItem("token")
@@ -89,6 +90,7 @@ function App() {
 
   return (
     <div className="App min-h-full flex">
+      <Modal onCancel={() => setShowModal(false)} message="Are you sure you want to logout?" show={showModal} onOk={() => onLogout()}/>
       <div className="p-2 h-screen min-w-[250px] w-1/6 bg-gray-800">
         <div className="p-2 h-full flex flex-col justify-between">
           <div className="flex justify-between items-center my-4">
@@ -101,7 +103,7 @@ function App() {
             <li>Room 3</li>
             <li>Room 4</li>
           </ul>
-          <button className="bg-red-600 hover:bg-red-700 p-2 px-4 rounded-md" onClick={() => onLogout()}>Logout</button>
+          <button className="bg-red-600 hover:bg-red-700 p-2 px-4 rounded-md" onClick={() => setShowModal(true)}>Logout</button>
         </div>
       </div>
       <div className="p-2 h-screen w-full">

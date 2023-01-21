@@ -5,7 +5,7 @@ export const sortDate = (dates) => {
 }
 
 export const formatDate = (date) => {
-  return new Date(date)?.toLocaleString('default', { month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true })
+  return new Date(date)?.toLocaleString('default', { month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true })
 }
 
 // export const queryData = async (url, token) => {
