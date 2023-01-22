@@ -37,7 +37,7 @@ export const Login = () => {
   return (
     <div className="absolute inset-0 grid items-center justify-center">
       <div style={{ width: 500 }}>
-        <h1 className="text-2xl mb-4 text-center">MERN CHAT</h1>
+        <h1 className="text-2xl mb-4 text-center">MERN CHAT APP</h1>
         <form className="flex flex-col" onSubmit={onSubmit} id="form">
           <input type="username" name="username" placeholder="username" className="p-2 rounded-lg mb-2"/>
           <input type="password" name="password" placeholder="password" className="p-2 rounded-lg mb-2" />
