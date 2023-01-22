@@ -25,6 +25,7 @@ function App() {
   const isLoggedIn = localStorage.getItem("isLoggedIn")
   const username = JSON.parse(localStorage.getItem("user"))
   const token = localStorage.getItem("token")
+  const sampleRoom = ["General", "Room 1", "Room 2", "Room 3", "Room 4"]
   const { data: allMessages, status, refetch } = useQuery('users', async () => {
     const response = await fetch(`${import.meta.env.VITE_ENDPOINT}/users/getMessages`, {
       method: 'GET',
@@ -74,11 +75,10 @@ function App() {
     messageBox.scrollTop =  messageBox.scrollHeight
   }
 
-  const onJoinRoom = (message) => {
-    if(message.key !== "Enter") return
+  const onJoinRoom = (room) => {
     refetch()
-    socket.emit("join room", message.target.value || "General")
-    setRoomID(message.target.value || "General")
+    socket.emit("join room", room)
+    setRoomID(room)
   }
   const onLogout = () => {
     localStorage.removeItem("isLoggedIn")
@@ -98,10 +98,11 @@ function App() {
             <h2 className="text-sm">Room: {roomID}</h2>
           </div>
           <ul className="my-12 text-center">
-            <li>Room 1</li>
-            <li>Room 2</li>
-            <li>Room 3</li>
-            <li>Room 4</li>
+            {
+              sampleRoom.map((room, i) => (
+                <li className={`${roomID == room ? "bg-gray-700" : "text-gray-500"} hover:bg-gray-700 rounded-md py-2 mb-2 cursor-pointer`} key={`room-${i}`} onClick={() => onJoinRoom(room)}>{room}</li>
+              ))
+            }
           </ul>
           <button className="bg-red-600 hover:bg-red-700 p-2 px-4 rounded-md" onClick={() => setShowModal(true)}>Logout</button>
         </div>
@@ -110,14 +111,12 @@ function App() {
         <div className="my-4 px-3 py-6 border min-h-[80%] max-h-[600px] border-gray-500 rounded-md text-left message-box overflow-auto">
           {
              messages?.flat()?.filter(message => message?.username != "").filter(room => room?.room == roomID).map((message, i) => ( 
-              <div>
-                <h1 title={formatDate(message?.createdAt)} key={`message-${i}`} className={`p-3 mb-1 flex justify-between items-center w-fit max-w-sm mb-6 ${username == message?.username ? "rounded-r-xl rounded-t-xl bg-green-600" : "ml-auto rounded-l-xl rounded-t-xl bg-gray-700"} relative`}>
-                  <span className="text-gray-400 absolute -top-6 left-2" style={{ fontSize: 11 }}>{username == message?.username ? "You" : message?.username}</span>
-                  <span className="break-all">
-                    {message?.text}
-                  </span>
-                </h1>
-              </div>
+              <h1 title={formatDate(message?.createdAt)} key={`message-${i}`} className={`p-3 mb-1 flex justify-between items-center w-fit max-w-sm mb-6 ${username == message?.username ? "rounded-r-xl rounded-t-xl bg-green-600" : "ml-auto rounded-l-xl rounded-t-xl bg-gray-700"} relative`}>
+                <span className="text-gray-400 absolute -top-6 left-2" style={{ fontSize: 11 }}>{username == message?.username ? "You" : message?.username}</span>
+                <span className="break-all">
+                  {message?.text}
+                </span>
+              </h1>
             ))
           }
         </div>
@@ -133,9 +132,9 @@ function App() {
             }} />
             {/* <button className="ml-2 bg-blue-500 bg- px-6 rounded-md">Send</button> */}
           </div>
-          <div className="flex mt-2">
+          {/* <div className="flex mt-2">
             <input type="text" placeholder="Join room..." className="p-2 rounded-md w-full focus:outline-none room-input" onKeyDown={(e) => onJoinRoom(e)} />
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
