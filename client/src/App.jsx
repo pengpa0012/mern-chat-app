@@ -110,13 +110,14 @@ function App() {
         <div className="my-4 px-3 py-6 border min-h-[80%] max-h-[600px] border-gray-500 rounded-md text-left message-box overflow-auto">
           {
              messages?.flat()?.filter(message => message?.username != "").filter(room => room?.room == roomID).map((message, i) => ( 
-              <h1 key={`message-${i}`} className={`p-3 mb-1 flex justify-between items-center w-1/2 mb-6 ${username == message?.username ? "rounded-r-xl rounded-t-xl bg-green-600" : "ml-auto rounded-l-xl rounded-t-xl bg-gray-700"} relative`}>
-                <span className="text-gray-400 absolute -top-6 left-2" style={{ fontSize: 11 }}>{username == message?.username ? "You" : message?.username}</span>
-                <span>
-                  {message?.text}
-                </span>
-                <span className="text-gray-400 absolute -bottom-6 right-2" style={{ fontSize: 11 }}>{formatDate(message?.createdAt)}</span>
-              </h1>
+              <div>
+                <h1 title={formatDate(message?.createdAt)} key={`message-${i}`} className={`p-3 mb-1 flex justify-between items-center w-fit max-w-sm mb-6 ${username == message?.username ? "rounded-r-xl rounded-t-xl bg-green-600" : "ml-auto rounded-l-xl rounded-t-xl bg-gray-700"} relative`}>
+                  <span className="text-gray-400 absolute -top-6 left-2" style={{ fontSize: 11 }}>{username == message?.username ? "You" : message?.username}</span>
+                  <span className="break-all">
+                    {message?.text}
+                  </span>
+                </h1>
+              </div>
             ))
           }
         </div>
