@@ -6,7 +6,7 @@ const server = http.createServer(app)
 const socketio = require('socket.io')
 const io = socketio(server, {
   cors: {
-    origin: "*",
+    origin: ["http://127.0.0.1:5173/", "https://mern-chat-app-client-five.vercel.app/"],
     methods: ["GET", "POST"]
   }
 })
@@ -24,16 +24,32 @@ app.use(cors())
 
 
 app.use("/users", userRoutes)
+
+let numClients = {};
+
 io.on('connection', (socket) => {
   console.log('A user connected')
   socket.on('disconnect', () => {
       console.log('User disconnected')
+      numClients[socket.room]--;
   })
 
   socket.on('join room', (room) => {
     socket.join(room);
     io.in(room).emit('user joined', room);
-  });
+    if (numClients[room] == undefined) {
+      numClients[room] = 1;
+    } else {
+        numClients[room]++;
+    }
+
+    console.log(numClients)   
+  })
+
+  socket.on("on leave room", (room) => {
+    numClients[room]--
+  })
+
 
   socket.on("new message", (message, username, room) => {
     const payload = {text: message, username, room, createdAt: Date.now()}
@@ -44,7 +60,6 @@ io.on('connection', (socket) => {
   socket.on("user typing", (message, room) => {
     io.in(room).emit("user typing", message)
   })
-
 })
 
 
@@ -54,8 +69,6 @@ server.listen(PORT, () => {
 })
 
 // TODO 
-// -Typing animation
-// -Room style
+// -Typing animation  
 // -Fixed logout bug
-// -Add sidebar content
-// -Add logout Modal
+// -User counter per room

@@ -78,6 +78,7 @@ function App() {
   const onJoinRoom = (room) => {
     refetch()
     socket.emit("join room", room)
+    socket.emit("on leave room", room)
     setRoomID(room)
   }
   const onLogout = () => {
