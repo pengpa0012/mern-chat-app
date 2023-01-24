@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "axios": "^1.2.3",
+    "jotai": "^1.13.1",
     "notiflix": "^3.2.6",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
