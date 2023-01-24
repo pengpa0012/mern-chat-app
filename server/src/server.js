@@ -64,6 +64,9 @@ io.on('connection', (socket) => {
 
 
 const PORT = 3000
+server.prependListener("request", (req, res) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+})
 server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
