@@ -6,7 +6,7 @@ const server = http.createServer(app)
 const socketio = require('socket.io')
 const io = socketio(server, {
   cors: {
-    origin: ["http://127.0.0.1:5173/", "https://mern-chat-app-client-five.vercel.app/"],
+    origin: ["http://127.0.0.1:5173", "https://mern-chat-app-client-five.vercel.app"],
     methods: ["GET", "POST"]
   }
 })
