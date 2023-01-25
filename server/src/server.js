@@ -5,9 +5,9 @@ const app = express()
 const server = http.createServer(app)
 const socketio = require('socket.io')
 const io = socketio(server, {
-  pingTimeout: 60000,
   cors: {
-    origin: "*",
+    origin: ["http://127.0.0.1:5173", "https://mern-chat-app-client-five.vercel.app"],
+    methods: ["GET", "POST"]
   }
 })
 const cors = require("cors")
@@ -65,7 +65,7 @@ io.on('connection', (socket) => {
 
 const PORT = 3000
 server.prependListener("request", (req, res) => {
-  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Origin", ["http://127.0.0.1:5173", "https://mern-chat-app-client-five.vercel.app"]);
 })
 server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
