@@ -11,7 +11,8 @@ const io = socketio(server, {
     transports: ['websocket', 'polling'],
     credentials: true
   },
-  allowEIO3: true
+  allowEIO3: true,
+  pingTimeout: 60000
 })
 const cors = require("cors")
 const userRoutes = require("./routes/users")
