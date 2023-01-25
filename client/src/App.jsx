@@ -21,7 +21,7 @@ function App() {
   const [showModal, setShowModal] = useState(false)
   const [roomID, setRoomID] = useState("General")
   // const [userTyping, setUserTyping] = useState()
-  const [socket] = useState(io(`https://${import.meta.env.VITE_ENDPOINT}`, {}))
+  const [socket] = useState(io(import.meta.env.VITE_ENDPOINT, {}))
   const isLoggedIn = localStorage.getItem("isLoggedIn")
   const username = JSON.parse(localStorage.getItem("user"))
   const token = localStorage.getItem("token")
