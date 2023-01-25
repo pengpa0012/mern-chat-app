@@ -6,7 +6,7 @@ const server = http.createServer(app)
 const socketio = require('socket.io')
 const io = socketio(server, {
   cors: {
-    origin: "https://mern-chat-app-client-five.vercel.app",
+    origin: "*",
     methods: ["GET", "POST"]
   }
 })
@@ -65,7 +65,7 @@ io.on('connection', (socket) => {
 
 const PORT = 3000
 server.prependListener("request", (req, res) => {
-  res.setHeader("Access-Control-Allow-Origin", "https://mern-chat-app-client-five.vercel.app");
+  res.setHeader("Access-Control-Allow-Origin", "*");
 })
 server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
